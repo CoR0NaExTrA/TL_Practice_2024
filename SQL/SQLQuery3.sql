@@ -5,9 +5,9 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Rooms')
 		room_number NVARCHAR(50) NOT NULL,
 		room_type NVARCHAR(50) NOT NULL,
 		price_per_night NVARCHAR(50) NOT NULL,
-		availability NVARCHAR(50) NOT NULL,
+		availability BIT NOT NULL,
 
-		CONSTRAINT PK_Rooms_room_id PRIMARY KEY (room_id)
+		CONSTRAINT PK_rooms_room_id PRIMARY KEY (room_id)
 	)
 
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Customers')
@@ -19,7 +19,7 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Customers')
 		email NVARCHAR(50) NOT NULL,
 		phone_number NVARCHAR(50) NOT NULL,
 
-		CONSTRAINT PK_Customers_customer_id PRIMARY KEY (customer_id)
+		CONSTRAINT PK_customers_customer_id PRIMARY KEY (customer_id)
 	)
 
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Bookings')
@@ -30,12 +30,12 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Bookings')
 		room_id INT NOT NULL,
 		check_in_date NVARCHAR(50) NOT NULL,
 		check_out_date NVARCHAR(50) NOT NULL,
-		CONSTRAINT PK_Bookings_booking_id PRIMARY KEY (booking_id),
+		CONSTRAINT PK_bookings_booking_id PRIMARY KEY (booking_id),
 
-		CONSTRAINT FK_Bookings_customer_id
+		CONSTRAINT FK_bookings_customer_id
 			FOREIGN KEY (customer_id) REFERENCES dbo.Customers (customer_id),
 
-		CONSTRAINT FK_Bookings_room_id
+		CONSTRAINT FK_bookings_room_id
 			FOREIGN KEY (room_id) REFERENCES dbo.Rooms (room_id)
 	)
 
@@ -45,29 +45,32 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Facilities')
 
 		facility_name NVARCHAR(50) NOT NULL,
 
-		CONSTRAINT PK_Facilities_facility_id PRIMARY KEY (facility_id)
+		CONSTRAINT PK_facilities_facility_id PRIMARY KEY (facility_id)
 	)
 
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='RoomsToFacilities')
 	CREATE TABLE dbo.RoomsToFacilities(
+        id INT IDENTITY(1,1) NOT NULL,
+
 		room_id INT NOT NULL,
 		facility_id INT NOT NULL,
+        CONSTRAINT PK_roomstofacilities_facility_id PRIMARY KEY (id),
 
-		CONSTRAINT FK_RoomsToFacilities_room_id 
+		CONSTRAINT FK_roomstofacilities_room_id 
 			FOREIGN KEY (room_id) REFERENCES dbo.Rooms (room_id),
 
-		CONSTRAINT FK_RoomsToFacilities_facility_id
+		CONSTRAINT FK_roomstofacilities_facility_id
 			FOREIGN KEY (facility_id) REFERENCES dbo.Facilities (facility_id)
 	)
 
 INSERT INTO dbo.Rooms (room_number, room_type, price_per_night, availability)
 VALUES 
-	('707', 'single room', '50$', 'free'),
-	('404', 'double room', '100$', 'occupied'),
-	('505', 'single room', '70$', 'occupied'),
-	('606', 'double room', '150$', 'free'),
-	('909', 'single room', '90$', 'occupied'),
-	('101', 'double room', '180$', 'free');
+	('707', 'single room', '50$', 'true'),
+	('404', 'double room', '100$', 'false'),
+	('505', 'single room', '70$', 'true'),
+	('606', 'double room', '150$', 'false'),
+	('909', 'single room', '90$', 'false'),
+	('101', 'double room', '180$', 'true');
 
 INSERT INTO dbo.Customers (first_name, last_name, email, phone_number)
 VALUES 
