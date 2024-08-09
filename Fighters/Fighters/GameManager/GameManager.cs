@@ -1,7 +1,7 @@
 ﻿using Fighters.Models.Fighters;
 using Fighters.Services;
 
-namespace Fighters.Manager;
+namespace Fighters.GameManager;
 public class GameManager : IGameManager
 {
     private readonly IFighterService _fighterService;
