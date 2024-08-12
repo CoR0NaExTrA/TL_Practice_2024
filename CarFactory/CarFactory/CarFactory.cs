@@ -8,61 +8,50 @@ using CarFactory.Models.SteeringLocation;
 namespace CarFactory;
 public class CarFactory
 {
-    List<ICar> _cars = new();
-    public void Run()
+    public void Run(List<ICar> _cars)
     {
         string command = "";
-        while ( command != "4" )
+        while (command != "4")
         {
-            PrintMenu();
             command = Console.ReadLine();
-            if ( command == "4" )
+            if (command == "4")
             {
                 break;
             }
             try
             {
-                ExecutingCommands( command );
+                ExecutingCommands(command, _cars);
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                Console.WriteLine( $"Error: {ex.Message}" );
+                Console.WriteLine($"Error: {ex.Message}");
             }
-            Console.WriteLine( "To continue, press the enter" );
+            Console.WriteLine("To continue, press the enter");
             command = Console.ReadLine();
         }
     }
 
-    private void PrintMenu()
+    private void ExecutingCommands(string command, List<ICar> _cars)
     {
-        Console.WriteLine( "Menu: " +
-                            "\n 1 - New car; " +
-                            "\n 2 - All car; " +
-                            "\n 3 - Remove car; " +
-                            "\n 4 - Exit" );
-    }
-
-    private void ExecutingCommands( string command )
-    {
-        switch ( command )
+        switch (command)
         {
             case "1":
-                NewCar();
+                NewCar(_cars);
                 break;
             case "2":
-                AllCar();
+                AllCar(_cars);
                 break;
             case "3":
-                RemoveCar();
+                RemoveCar(_cars);
                 break;
             case "4":
                 break;
             default:
-                throw new ArgumentException( "Invalid value" );
+                throw new ArgumentException("Invalid value");
         }
     }
 
-    private void NewCar()
+    private void NewCar(List<ICar> _cars)
     {
         Car car = new Car(
             name: GetName(),
@@ -73,22 +62,22 @@ public class CarFactory
             steeringLocation: GetSteeringLocation()
             );
 
-        _cars.Add( car );
+        _cars.Add(car);
         Console.WriteLine();
-        Console.WriteLine( car );
+        Console.WriteLine(car);
         Console.WriteLine();
-        Console.WriteLine( "Car was created" );
+        Console.WriteLine("Car was created");
 
     }
 
     private string GetName()
     {
-        Console.Write( "Enter name new car: " );
+        Console.Write("Enter name new car: ");
         string name = Console.ReadLine();
-        while ( String.IsNullOrEmpty( name ) )
+        while (String.IsNullOrEmpty(name))
         {
-            Console.WriteLine( "The name can't be empty or only made up of spaces" );
-            Console.Write( "Enter again: " );
+            Console.WriteLine("The name can't be empty or only made up of spaces");
+            Console.Write("Enter again: ");
             name = Console.ReadLine();
         }
         return name;
@@ -96,19 +85,19 @@ public class CarFactory
 
     private ICarBody GetBody()
     {
-        Console.WriteLine( "Choose car body: " +
+        Console.WriteLine("Choose car body: " +
                             "\n Sedan" +
-                            "\n Coupe" );
-        while ( true )
+                            "\n Coupe");
+        while (true)
         {
-            switch ( Console.ReadLine() )
+            switch (Console.ReadLine())
             {
                 case "Sedan":
                     return new Sedan();
                 case "Coupe":
                     return new Coupe();
                 default:
-                    Console.WriteLine( "There is no such car body in the list. Try again" );
+                    Console.WriteLine("There is no such car body in the list. Try again");
                     break;
             }
         }
@@ -116,13 +105,13 @@ public class CarFactory
 
     private IEngine GetEngine()
     {
-        Console.WriteLine( "Choose engine: " +
+        Console.WriteLine("Choose engine: " +
                             "\n Inline engine" +
                             "\n Engine V type" +
-                            "\n Engine W type" );
-        while ( true )
+                            "\n Engine W type");
+        while (true)
         {
-            switch ( Console.ReadLine() )
+            switch (Console.ReadLine())
             {
                 case "Inline engine":
                     return new InlineEngine();
@@ -131,7 +120,7 @@ public class CarFactory
                 case "Engine W type":
                     return new EngineWType();
                 default:
-                    Console.WriteLine( "There is no such engine in the list. Try again" );
+                    Console.WriteLine("There is no such engine in the list. Try again");
                     break;
             }
         }
@@ -139,19 +128,19 @@ public class CarFactory
 
     private IColors GetColor()
     {
-        Console.WriteLine( "Choose color: " +
+        Console.WriteLine("Choose color: " +
                             "\n White" +
-                            "\n Black" );
-        while ( true )
+                            "\n Black");
+        while (true)
         {
-            switch ( Console.ReadLine() )
+            switch (Console.ReadLine())
             {
                 case "White":
                     return new White();
                 case "Black":
                     return new Black();
                 default:
-                    Console.WriteLine( "There is no such color in the list. Try again" );
+                    Console.WriteLine("There is no such color in the list. Try again");
                     break;
             }
         }
@@ -159,13 +148,13 @@ public class CarFactory
 
     private ITransmission GetTransmission()
     {
-        Console.WriteLine( "Choose transmission: " +
+        Console.WriteLine("Choose transmission: " +
                             "\n Automatic" +
                             "\n Mechanical" +
-                            "\n Robot" );
-        while ( true )
+                            "\n Robot");
+        while (true)
         {
-            switch ( Console.ReadLine() )
+            switch (Console.ReadLine())
             {
                 case "Automatic":
                     return new Automatic();
@@ -174,7 +163,7 @@ public class CarFactory
                 case "Robot":
                     return new Robot();
                 default:
-                    Console.WriteLine( "There is no such transmission in the list. Try again" );
+                    Console.WriteLine("There is no such transmission in the list. Try again");
                     break;
             }
         }
@@ -182,32 +171,32 @@ public class CarFactory
 
     private SteeringPosition GetSteeringLocation()
     {
-        Console.WriteLine( "Enter steering location(left/right): " );
+        Console.WriteLine("Enter steering location(left/right): ");
         SteeringPosition location;
-        while ( !( Enum.TryParse( Console.ReadLine(), true, out location ) ) )
+        while (!(Enum.TryParse(Console.ReadLine(), true, out location)))
         {
-            Console.WriteLine( "There is no such steering location in the list. Try again" );
+            Console.WriteLine("There is no such steering location in the list. Try again");
         }
         return location;
     }
 
-    private void AllCar()
+    private void AllCar(List<ICar> _cars)
     {
-        _cars.ForEach( car => Console.WriteLine( car ) );
-        Console.WriteLine( "Cars was printed" );
+        _cars.ForEach(car => Console.WriteLine(car));
+        Console.WriteLine("Cars was printed");
     }
 
-    private void RemoveCar()
+    private void RemoveCar(List<ICar> _cars)
     {
-        AllCar();
-        Console.Write( "Enter name car: " );
+        AllCar(_cars);
+        Console.Write("Enter name car: ");
         string name = Console.ReadLine();
-        var car = _cars.FirstOrDefault( c => c.Name == name );
-        if ( car == null )
+        var car = _cars.FirstOrDefault(c => c.Name == name);
+        if (car == null)
         {
-            throw new ArgumentException( $"Car {name} not found" );
+            throw new ArgumentException($"Car {name} not found");
         }
-        _cars.Remove( car );
-        Console.WriteLine( "Car removed" );
+        _cars.Remove(car);
+        Console.WriteLine("Car removed");
     }
 }
