@@ -79,13 +79,13 @@ void AddTranslation( Dictionary<string, string> dictionary )
     }
 }
 
-void TryTranslate( Dictionary<string, string> d )
+void TryTranslate( Dictionary<string, string> dictionary )
 {
     const string positiveAnser = "y";
     string word = GetNotEmptyString( "слово" );
-    if ( d.ContainsKey( word ) )
+    if ( dictionary.ContainsKey( word ) )
     {
-        Console.WriteLine( $"Слово \"{word}\" переводится как \"{d[ word ]}\"" );
+        Console.WriteLine( $"Слово \"{word}\" переводится как \"{dictionary[ word ]}\"" );
     }
     else
     {
@@ -93,12 +93,12 @@ void TryTranslate( Dictionary<string, string> d )
         if ( Console.ReadLine() == positiveAnser )
         {
             string translation = GetNotEmptyString( "перевод слова" );
-            d.Add( word, translation );
+            dictionary.Add( word, translation );
         }
     }
 }
 
-void SaveDictionaryToFile( Dictionary<string, string> d )
+void SaveDictionaryToFile( Dictionary<string, string> dictionary )
 {
     if ( File.Exists( "Dictionary.txt" ) )
     {
@@ -106,7 +106,7 @@ void SaveDictionaryToFile( Dictionary<string, string> d )
     }
 
     StreamWriter sw = new StreamWriter( "Dictionary.txt" );
-    foreach ( var pair in d )
+    foreach ( var pair in dictionary )
     {
         sw.WriteLine( $"{pair.Key}{":"}{pair.Value}" );
     }
